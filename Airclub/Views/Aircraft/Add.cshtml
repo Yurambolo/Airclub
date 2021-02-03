@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+}
+@model Airclub.Models.Aircraft
+
+<h2>Нова одиниця техніки</h2>
+
+@using (Html.BeginForm("Add", "Aircraft", FormMethod.Post))
+{
+<fieldset>
+    @Html.HiddenFor(m => m.Id)
+    <p>
+        @Html.LabelFor(m => m.RegistrationNumber, "Реєстраційний номер")
+        <br />
+        @Html.EditorFor(m => m.RegistrationNumber)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Class, "Клас")
+        <br />
+        @Html.DropDownListFor(m => m.Class, ViewBag.Classes as SelectList)
+
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Model, "Модель")
+        <br />
+        @Html.EditorFor(m => m.Model)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.Manufacturer, "Виробник")
+        <br />
+        @Html.EditorFor(m => m.Manufacturer)
+    </p>
+    <p>
+        @Html.HiddenFor(m => m.Status)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.YearOfProduction, "Рік виробництва")
+        <br />
+        @Html.EditorFor(m => m.YearOfProduction)
+    </p>
+    <p>
+        @Html.LabelFor(m => m.BaseId, "Розміщення")
+        <br />
+        @Html.DropDownListFor(m => m.BaseId, ViewBag.Bases as SelectList)
+        <input type="button" value="Запропонувати розміщення" onClick='ChooseBase()'>
+    </p>
+    <p>
+        @Html.HiddenFor(m => m.FinishedContracts)
+    </p>
+    <p><input type="submit" value="Зберегти" /></p>
+</fieldset>
+}
+@section scripts{
+    <script type="text/javascript">
+        function ChooseBase() {
+            function CallBase() {
+                $.ajax({
+                    url: '/Aircraft/ChooseBase',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: { airclass: document.getElementById('Class').value, model: document.getElementById('Model').value, manufacturer: document.getElementById('Manufacturer').value, year: parseInt(document.getElementById('YearOfProduction').value) },
+                    success: function (id) {
+                        var ddl = document.getElementById('BaseId');
+                        var opts = ddl.options.length;
+                        for (var i = 0; i < opts; i++) {
+                            if (ddl.options[i].value == id) {
+                                ddl.options[i].selected = true;
+                                break;
+                            }
+                        }
+                    },
+                    error: function () {
+                        alert('Error occured');
+                    }
+                });
+            }
+            CallBase();
+        }
+    </script>
+}

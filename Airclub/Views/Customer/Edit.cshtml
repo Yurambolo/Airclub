@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+}
+@model Airclub.Models.Customer
+<h2>Кліент № @Model.Id</h2>
+@using (Html.BeginForm("Edit", "Customer", FormMethod.Post))
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.Id)
+        <p>
+            @Html.LabelFor(m => m.Name, "ПІБ");
+            <br />
+            @Html.EditorFor(m => m.Name)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Passport, "Номер пасспорта")
+            <br />
+            @Html.EditorFor(m => m.Passport)
+
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Adress, "Адреса")
+            <br />
+            @Html.EditorFor(m => m.Adress)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Birthday, "День народження")
+            <br />
+            @Html.TextBoxFor(m => m.Birthday, new { @type = "date", id = "birthday" })
+        </p>
+        <p><input type="submit" value="Зберегти" /></p>
+    </fieldset>
+    @section scripts{
+        <script type="text/javascript">
+            Date.prototype.toDate = (function () {
+                var local = new Date(@Model.Birthday.Year, @Model.Birthday.Month-1, @Model.Birthday.Day+1);
+                return local.toJSON().slice(0, 10);
+            });
+            document.getElementById('birthday').value = new Date().toDate();
+        </script>
+    }
+}

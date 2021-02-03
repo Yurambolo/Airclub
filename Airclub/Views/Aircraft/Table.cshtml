@@ -1,0 +1,106 @@
+﻿@model Airclub.Models.Filter.AircraftListViewModel
+@{
+    ViewBag.Title = "Table";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Техника</title>
+    <script>
+        function AskSubmit(id) {
+            if (confirm("Видалити запис номер " + id + "?"))
+                $.ajax({
+                    url: '/Aircraft/Delete',
+                    data: { id: id }
+                }).done(function () {
+                    alert('Deleted');
+                });
+        }
+    </script>
+</head>
+<body>
+    <form method="get">
+        <div class="form-inline">
+            <label class="control-label">Клас: </label>
+            @Html.DropDownList("tclass", Model.Classes as SelectList,
+                        htmlAttributes: new { @class = "form-control" })
+            <label class="control-label">Модель: </label>
+            @Html.DropDownList("model", Model.Models as SelectList,
+                        htmlAttributes: new { @class = "form-control" })
+            <label class="control-label">Виробник: </label>
+            @Html.DropDownList("manufacturer", Model.Manufacturers as SelectList,
+                        htmlAttributes: new { @class = "form-control" })
+            <label class="control-label">Адреса бази: </label>
+            @Html.DropDownList("airbase", Model.Bases as SelectList,
+                        htmlAttributes: new { @class = "form-control" })
+            <label class="control-label">Рік виробництва: </label>
+            @Html.DropDownList("year", Model.YearsOfProduction as SelectList,
+                        htmlAttributes: new { @class = "form-control" })
+            <br />
+            <label class="control-label">Статус: </label>
+            @Html.DropDownList("status", Model.Statuses as SelectList,
+                        htmlAttributes: new { @class = "form-control" })
+
+            <input type="submit" value="Фільтр" class="btn btn-default" />
+            <input type="button" value="Сброс" class="btn btn-default" onClick='location.href="/Aircraft/Table"' />
+        </div>
+    </form>
+    <form method="get">
+        <div class="form-inline">
+            <p>
+                Пошук по @Html.DropDownList("SearchParam", ViewBag.SearchParams as SelectList): @Html.TextBox("SearchString")
+                <input type="submit" value="Пошук" />
+            </p>
+        </div>
+    </form>
+    <div>
+        <h3>Техніка</h3>
+        <table border="1">
+            <tr>
+                <td><p>Id</p></td>
+                <td><p>@Html.ActionLink("Реєстраційний номер", "Table", new { tclass = ViewBag.Class, model = ViewBag.Model, manufacturer = ViewBag.Manufacturer, airbase = ViewBag.Airbase, year = ViewBag.Year, status = ViewBag.Status, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.RegNumSortParm })</p></td>
+                <td><p>@Html.ActionLink("Клас", "Table", new { tclass = ViewBag.Class, model = ViewBag.Model, manufacturer = ViewBag.Manufacturer, airbase = ViewBag.Airbase, year = ViewBag.Year, status = ViewBag.Status, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.ClassSortParm })</p></td>
+                <td><p>@Html.ActionLink("Модель", "Table", new { tclass = ViewBag.Class, model = ViewBag.Model, manufacturer = ViewBag.Manufacturer, airbase = ViewBag.Airbase, year = ViewBag.Year, status = ViewBag.Status, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.ModelSortParm })</p></td>
+                <td><p>@Html.ActionLink("Виробник", "Table", new { tclass = ViewBag.Class, model = ViewBag.Model, manufacturer = ViewBag.Manufacturer, airbase = ViewBag.Airbase, year = ViewBag.Year, status = ViewBag.Status, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.ManufacturerSortParm })</p></td>
+                <td><p>@Html.ActionLink("Адреса бази", "Table", new { tclass = ViewBag.Class, model = ViewBag.Model, manufacturer = ViewBag.Manufacturer, airbase = ViewBag.Airbase, year = ViewBag.Year, status = ViewBag.Status, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.BaseSortParm })</p></td>
+                <td><p>@Html.ActionLink("Статус", "Table", new { tclass = ViewBag.Class, model = ViewBag.Model, manufacturer = ViewBag.Manufacturer, airbase = ViewBag.Airbase, year = ViewBag.Year, status = ViewBag.Status, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.StatusSortParm })</p></td>
+                <td><p>@Html.ActionLink("Рік виробництва", "Table", new { tclass = ViewBag.Class, model = ViewBag.Model, manufacturer = ViewBag.Manufacturer, airbase = ViewBag.Airbase, year = ViewBag.Year, status = ViewBag.Status, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.YearSortParm })</p></td>
+                <td><p>@Html.ActionLink("Кількість завершених договорів", "Table", new { tclass = ViewBag.Class, model = ViewBag.Model, manufacturer = ViewBag.Manufacturer, airbase = ViewBag.Airbase, year = ViewBag.Year, status = ViewBag.Status, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.ContractsSortParm })</p></td>
+            </tr>
+
+            @foreach (var b in ViewBag.Aircrafts)
+            {
+        <tr>
+            <td><p>@b.Id</p></td>
+            <td><p>@b.RegistrationNumber</p></td>
+            <td><p>@b.Class</p></td>
+            <td><p>@b.Model</p></td>
+            <td><p>@b.Manufacturer</p></td>
+            @if (b.Base == null)
+            {
+                <td><p>null</p></td>
+            }
+            else{
+                <td><p>@b.Base.City, @b.Base.Adress</p></td>
+            }
+                <td><p>@b.Status</p></td>
+                <td><p>@b.YearOfProduction</p></td>
+                <td><p>@b.FinishedContracts</p></td>
+                @if (ViewBag.IsOwner)
+                {
+                    <td><p><input type="button" value="Редагувати" onClick='location.href="/Aircraft/Edit/@b.Id"'></td>
+                    <td><p><input type="button" value="Видалити" onClick="AskSubmit(@b.Id)"></td>
+                }
+            </tr>
+            }
+        </table>
+    </div>
+    @if (ViewBag.IsOwner)
+    {
+        <input type="button" value="Додати" onClick='location.href="/Aircraft/Add"'>
+    }
+</body>
+

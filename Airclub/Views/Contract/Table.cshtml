@@ -1,0 +1,97 @@
+﻿@model Airclub.Models.Filter.ContractListViewModel
+@{
+    ViewBag.Title = "Table";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Договори</title>
+    <script>
+        function AskSubmit(id) {
+            if (confirm("Видалити запис номер " + id + "?"))
+                $.ajax({
+                    url: '/Contract/Delete',
+                    data: { id: id },
+                    success: function (data) {
+                        callback.call(this, data);
+                    },
+                    error: function (data) {
+                    }
+                });
+        }
+    </script>
+</head>
+<body>
+    <form method="get">
+        <div class="form-inline">
+            <label class="control-label">Техніка: </label>
+            @Html.DropDownList("aircraft", Model.Aircrafts as SelectList,
+                        htmlAttributes: new { @class = "form-control" })
+            <label class="control-label">Послуга: </label>
+            @Html.DropDownList("service", Model.Services as SelectList,
+                        htmlAttributes: new { @class = "form-control" })
+            <label class="control-label">Співробітник: </label>
+            @Html.DropDownList("administrator", Model.Administrators as SelectList,
+                        htmlAttributes: new { @class = "form-control" })
+            <label class="control-label">Клієнт: </label>
+            @Html.DropDownList("customer", Model.Customers as SelectList,
+                        htmlAttributes: new { @class = "form-control" })
+
+            <input type="submit" value="Фільтр" class="btn btn-default" />
+            <input type="button" value="Сброс" class="btn btn-default" onClick='location.href="/Contract/Table"' />
+        </div>
+    </form>
+    <form method="get">
+        <div class="form-inline">
+            <p>
+                Пошук по @Html.DropDownList("SearchParam", ViewBag.SearchParams as SelectList): @Html.TextBox("SearchString")
+                <input type="submit" value="Пошук" />
+            </p>
+        </div>
+    </form>
+    <div>
+        <h3>Договори</h3>
+        <table border="1">
+            <tr>
+                <td><p>Id</p></td>
+                <td><p>@Html.ActionLink("Послуга", "Table", new { aircraft = ViewBag.Aircraft, service = ViewBag.Service, administrator = ViewBag.Administrator, customer = ViewBag.Customer, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.ServiceSortParm })</p></td>
+                <td><p>@Html.ActionLink("Техніка", "Table", new { aircraft = ViewBag.Aircraft, service = ViewBag.Service, administrator = ViewBag.Administrator, customer = ViewBag.Customer, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.AircraftSortParm })</p></td>
+                <td><p>@Html.ActionLink("Співробітник", "Table", new { aircraft = ViewBag.Aircraft, service = ViewBag.Service, administrator = ViewBag.Administrator, customer = ViewBag.Customer, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.AdministratorSortParm })</p></td>
+                <td><p>@Html.ActionLink("Клієнт", "Table", new { aircraft = ViewBag.Aircraft, service = ViewBag.Service, administrator = ViewBag.Administrator, customer = ViewBag.Customer, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.CustomerSortParm })</p></td>
+                <td><p>@Html.ActionLink("Дата підписання", "Table", new { aircraft = ViewBag.Aircraft, service = ViewBag.Service, administrator = ViewBag.Administrator, customer = ViewBag.Customer, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.StartDateSortParm })</p></td>
+                <td><p>@Html.ActionLink("Дата початку дії", "Table", new { aircraft = ViewBag.Aircraft, service = ViewBag.Service, administrator = ViewBag.Administrator, customer = ViewBag.Customer, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.FinishDateSortParm })</p></td>
+                <td><p>@Html.ActionLink("Дата закінчення дії", "Table", new { aircraft = ViewBag.Aircraft, service = ViewBag.Service, administrator = ViewBag.Administrator, customer = ViewBag.Customer, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.SignDateSortParm })</p></td>
+                <td><p>@Html.ActionLink("Загальна вартість", "Table", new { aircraft = ViewBag.Aircraft, service = ViewBag.Service, administrator = ViewBag.Administrator, customer = ViewBag.Customer, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.CostSortParm })</p></td>
+            </tr>
+            @foreach (var b in ViewBag.Contracts)
+            {
+                <tr>
+                    <td><p>@b.Id</p></td>
+                    <td><p>@b.Service.Name</p></td>
+                    <td><p>@b.Service.Aircraft.RegistrationNumber</p></td>
+                    <td><p>@b.Administrator.Name</p></td>
+                    <td><p>@b.Customer.Name</p></td>
+                    <td><p>@b.ContractSignDate</p></td>
+                    <td><p>@b.ContractStartDate</p></td>
+                    <td><p>@b.ContractFinishDate</p></td>
+                    <td><p>@b.TotalCost</p></td>
+                    @if (ViewBag.CanSee[b.Id])
+                    {
+                        <td><p><input type="button" value="Редагувати" onClick='location.href="/Contract/Edit/@b.Id"'></td>
+                        <td><p><input type="button" value="Видалити" onClick="AskSubmit(@b.Id)"></td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+                    <td><p><input type="button" value="Завантажити договір" onClick='location.href="/Reporting/Contract/@b.Id"'></td>
+                </tr>
+            }
+        </table>
+    </div>
+    <input type="button" value="Додати" onClick='location.href="/Contract/Add"'>
+</body>

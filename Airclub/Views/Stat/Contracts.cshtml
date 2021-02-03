@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "Contracts";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Контракти</title>
+</head>
+<body>
+    <div>
+        <h2>Контракти</h2>
+        @foreach (var y in ViewBag.Years)
+        {
+            <h3>@y</h3>
+            foreach (var m in ViewBag.Months)
+            {
+                switch (m)
+                {
+                    case 1:
+                        <h4>Січень</h4>
+                        break;
+                    case 2:
+                        <h4>Лютий</h4>
+                        break;
+                    case 3:
+                        <h4>Березень</h4>
+                        break;
+                    case 4:
+                        <h4>Квітень</h4>
+                        break;
+                    case 5:
+                        <h4>Травень</h4>
+                        break;
+                    case 6:
+                        <h4>Червень</h4>
+                        break;
+                    case 7:
+                        <h4>Липень</h4>
+                        break;
+                    case 8:
+                        <h4>Серпень</h4>
+                        break;
+                    case 9:
+                        <h4>Вересень</h4>
+                        break;
+                    case 10:
+                        <h4>Жовтень</h4>
+                        break;
+                    case 11:
+                        <h4>Листопад</h4>
+                        break;
+                    case 12:
+                        <h4>Грудень</h4>
+                        break;
+                    default:
+                        break;
+                }
+                <br>
+                foreach (var c in ViewBag.Contracts)
+                {
+                    if (c.ContractSignDate.Month == m && c.ContractSignDate.Year == y)
+                    {
+                        <p>Техніка: @c.Service.Aircraft.RegistrationNumber</p>
+                        <p>Послуга: @c.Service.Name</p>
+                        <p>Співробітник: @c.Administrator.Name</p>
+                        <p>Клієнт: @c.Customer.Name</p>
+                        <p>Дата підписання: @c.ContractSignDate</p>
+                        <p>Початок дії: @c.ContractStartDate</p>
+                        <p>Закінчення дії: @c.ContractFinishDate</p>
+                        <p>Загальна вартість: @c.TotalCost</p>
+                        <br>
+                    }
+                }
+            }
+        }
+    </div>
+</body>
+
+
+

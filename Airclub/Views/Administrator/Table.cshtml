@@ -1,0 +1,73 @@
+﻿@model Airclub.Models.Filter.AdministratorsListViewModel
+@{
+    ViewBag.Title = "Table";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Співробітники</title>
+    <script>
+        function AskSubmit(id) {
+            if (confirm("Видалити запис номер " + id + "?"))
+                $.ajax({
+                    url: '/Administrator/Delete',
+                    data: { id: id }
+                }).done(function () {
+                    alert('Deleted');
+                });
+        }
+    </script>
+</head>
+<body>
+    <form method="get">
+        <div class="form-inline">
+            <label class="control-label">Рівень доступу: </label>
+            @Html.DropDownList("role", Model.Roles as SelectList,
+                        htmlAttributes: new { @class = "form-control" })
+            <input type="submit" value="Фільтр" class="btn btn-default" />
+            <input type="button" value="Сброс" class="btn btn-default" onClick='location.href="/Administrator/Table"' />
+        </div>
+    </form>
+    <form method="get">
+        <div class="form-inline">
+            <p>
+                Пошук по @Html.DropDownList("SearchParam", ViewBag.SearchParams as SelectList): @Html.TextBox("SearchString")
+                <input type="submit" value="Пошук" />
+            </p>
+        </div>
+    </form>
+    <div>
+        <h3>Співробітники</h3>
+        <table border="1">
+            <tr>
+                <td><p>Id</p></td>
+                <td><p>Логін</p></td>
+                <td><p>Пароль</p></td>
+                <td><p>@Html.ActionLink("ПІБ", "Table", new { role = ViewBag.Role, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.NameSortParm })</p></td>
+                <td><p>@Html.ActionLink("Рівень доступу", "Table", new { role = ViewBag.Role, SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.RoleSortParm })</p></td>
+            </tr>
+            @foreach (var b in ViewBag.Administrators)
+            {
+                <tr>
+                    <td><p>@b.Id</p></td>
+                    <td><p>@b.Login</p></td>
+                    <td><p>@b.Password</p></td>
+                    <td><p>@b.Name</p></td>
+                    <td><p>@b.AccessLevel</p></td>
+                    @if (ViewBag.IsOwner)
+                    {
+                        <td><p><input type="button" value="Редагувати" onClick='location.href="/Administrator/Edit/@b.Id"'></td>
+                        <td><p><input type="button" value="Видалити" onClick="AskSubmit(@b.Id)"></td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    @if (ViewBag.IsOwner)
+    {
+        <input type="button" value="Додати" onClick='location.href="/Administrator/Add"'>
+    }
+</body>

@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+}
+@model Airclub.Models.Aircraft
+<h2>Техніка № @Model.Id</h2>
+@using (Html.BeginForm("Edit", "Aircraft", FormMethod.Post))
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.Id)
+        <p>
+            @Html.LabelFor(m => m.RegistrationNumber, "Реєстраційний номер")
+            <br />
+            @Html.EditorFor(m => m.RegistrationNumber)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Class, "Клас")
+            <br />
+            @Html.DropDownListFor(m => m.Class, ViewBag.Classes as SelectList)
+
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Model, "Модель")
+            <br />
+            @Html.EditorFor(m => m.Model)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Manufacturer, "Виробник")
+            <br />
+            @Html.EditorFor(m => m.Manufacturer)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.BaseId, "Розміщення")
+            <br />
+            @Html.DropDownListFor(m => m.BaseId, ViewBag.Bases as SelectList)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Status, "Статус")
+            <br />
+            @Html.EditorFor(m => m.Status)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.YearOfProduction, "Рік виробництва")
+            <br />
+            @Html.EditorFor(m => m.YearOfProduction)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.FinishedContracts, "Завершені договоры")
+            <br />
+            @Html.EditorFor(m => m.FinishedContracts)
+        </p>
+        <p><input type="submit" value="Зберегти" /></p>
+    </fieldset>
+}

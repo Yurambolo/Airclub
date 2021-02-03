@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+@model Airclub.Models.LoginModel
+<h2>Вхід</h2>
+@using (Html.BeginForm("Login", "Account", FormMethod.Post))
+{
+    <fieldset>
+        @Html.ValidationSummary(true)
+        <p>
+            @Html.LabelFor(m => m.Login, "Логін")
+            <br />
+            @Html.EditorFor(m => m.Login)
+            @Html.ValidationMessageFor(model => model.Login)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Password, "Пароль")
+            <br />
+            @Html.EditorFor(m => m.Password)
+            @Html.ValidationMessageFor(model => model.Password)
+
+        </p>
+        <p><input type="submit" value="Увійти" /></p>
+    </fieldset>
+}
+

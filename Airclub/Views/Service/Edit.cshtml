@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+}
+@model Airclub.Models.Service
+
+<h2>Техніка № @Model.Id</h2>
+
+@using (Html.BeginForm("Edit", "Service", FormMethod.Post))
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.Id)
+        <p>
+            @Html.LabelFor(m => m.AircraftId, "Техніка");
+            <br />
+            @Html.DropDownListFor(m => m.AircraftId, ViewBag.Aircrafts as SelectList)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Name, "Назва")
+            <br />
+            @Html.EditorFor(m => m.Name)
+
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Price, "Вартість")
+            <br />
+            @Html.EditorFor(m => m.Price)
+        </p>
+        <p><input type="submit" value="Зберегти" /></p>
+    </fieldset>
+}

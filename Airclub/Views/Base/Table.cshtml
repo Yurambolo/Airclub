@@ -1,0 +1,78 @@
+﻿@model Airclub.Models.Filter.BasesListViewModel
+@{
+    ViewBag.Title = "Table";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Бази</title>
+    <script>
+        function AskSubmit(id) {
+            if (confirm("Видалити запис номер " + id + "?"))
+                $.ajax({
+                    url: '/Base/Delete',
+                    data: { id: id }
+                }).done(function () {
+                    alert('Deleted');
+                });
+        }
+    </script>
+</head>
+<body>
+    <form method="get">
+        <div class="form-inline">
+            <label class="control-label">Місто: </label>
+            @Html.DropDownList("city", Model.Cities as SelectList,
+                        htmlAttributes: new { @class = "form-control" })
+
+            <input type="submit" value="Фільтр" class="btn btn-default" />
+            <input type="button" value="Сброс" class="btn btn-default" onClick='location.href="/Base/Table"' />
+        </div>
+    </form>
+    <form method="get">
+        <div class="form-inline">
+            <p>
+                Пошук по @Html.DropDownList("SearchParam", ViewBag.SearchParams as SelectList): @Html.TextBox("SearchString")
+                <input type="submit" value="Пошук" />
+            </p>
+        </div>
+    </form>
+
+    <div>
+        <h3>Бази</h3>
+        <table border="1">
+            <tr>
+                <td><p>Id</p></td>
+                <td><p>@Html.ActionLink("Місто", "Table", new { city = ViewBag.City, sortOrder = ViewBag.NameSortParm })</p></td>
+                <td><p>Адреса</p></td>
+                <td><p>Поштовий індекс</p></td>
+                <td><p>@Html.ActionLink("Місткість", "Table", new { city = ViewBag.City, sortOrder = ViewBag.DateSortParm })</p></td>
+            </tr>
+            @foreach (var b in ViewBag.Bases)
+            {
+                <tr>
+                    <td><p>@b.Id</p></td>
+                    <td><p>@b.City</p></td>
+                    <td><p>@b.Adress</p></td>
+                    <td><p>@b.PostIndex</p></td>
+                    <td><p>@b.Capacity</p></td>
+                    @if (ViewBag.IsOwner)
+                    {
+                        <td><p><input type="button" value="Редагувати" onClick='location.href="/Base/Edit/@b.Id"'></td>
+                        <td><p><input type="button" value="Видалити" onClick="AskSubmit(@b.Id)"></td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+
+    @if (ViewBag.IsOwner)
+    {
+        <input type="button" value="Додати" onClick='location.href="/Base/Add"'>
+    }
+</body>
+

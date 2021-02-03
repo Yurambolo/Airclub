@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewBag.Title = "Top5";
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Топ-5</title>
+</head>
+<body>
+    <div>
+        <h2>Топ-5 одиниць техніки</h2>
+        @foreach (var a in ViewBag.Aircrafts)
+        {
+            <p>Реєстраційний номер: @a.RegistrationNumber</p>
+            <p>Клас: @a.Class</p>
+            <p>Модель: @a.Model</p>
+            <p>Виробник: @a.Manufacturer</p>
+            <p>Розташування: @a.Base.City @a.Base.Adress</p>
+            <p>Статус: @a.Status</p>
+            <p>Рік виробництва: @a.YearOfProduction</p>
+            <p>Завершених договорів: @a.FinishedContracts</p>
+            <br>
+        }
+    </div>
+</body>
+
+
+
+

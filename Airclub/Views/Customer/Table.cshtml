@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "CustomersTable";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Клієнти</title>
+    <script>
+        function AskSubmit(id) {
+            if (confirm("Видалити запис номер " + id + "?"))
+                $.ajax({
+                    url: '/Customer/Delete',
+                    data: { id: id }
+                }).done(function () {
+                    alert('Deleted');
+                });
+        }
+    </script>
+</head>
+<body>
+    <form method="get">
+        <div class="form-inline">
+            <p>
+                Пошук по @Html.DropDownList("SearchParam", ViewBag.SearchParams as SelectList): @Html.TextBox("SearchString")
+                <input type="submit" value="Пошук" />
+                <input type="button" value="Сброс" onClick='location.href="/Customer/Table"' />
+            </p>
+        </div>
+    </form>
+    <div>
+        <h3>Клієнти</h3>
+        <table border="1">
+            <tr>
+                <td><p>Id</p></td>
+                <td><p>@Html.ActionLink("ПІБ", "Table", new { SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.NameSortParm })</p></td>
+                <td><p>Номер пасспорта</p></td>
+                <td><p>Адреса</p></td>
+                <td><p>@Html.ActionLink("День народження", "Table", new { SearchParam = ViewBag.SearchParam, SearchString = ViewBag.SearchString, sortOrder = ViewBag.BirthdaySortParm })</p></td>
+
+            </tr>
+            @foreach (var b in ViewBag.Customers)
+            {
+                <tr>
+                    <td><p>@b.Id</p></td>
+                    <td><p>@b.Name</p></td>
+                    <td><p>@b.Passport</p></td>
+                    <td><p>@b.Adress</p></td>
+                    <td><p>@b.Birthday</p></td>
+                    <td><p><input type="button" value="Редагувати" onClick='location.href="/Customer/Edit/@b.Id"'></td>
+                    <td><p><input type="button" value="Видалити" onClick="AskSubmit(@b.Id)"></td>
+                </tr>
+            }
+        </table>
+    </div>
+    <input type="button" value="Додати" onClick='location.href="/Customer/Add"'>
+</body>

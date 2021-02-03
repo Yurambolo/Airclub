@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+}
+@model Airclub.Models.Base
+
+<h2>Нова база</h2>
+
+@using (Html.BeginForm("Add", "Base", FormMethod.Post))
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.Id)
+        <p>
+            @Html.LabelFor(m => m.City, "Місто")
+            <br />
+            @Html.EditorFor(m => m.City)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Adress, "Адреса")
+            <br />
+            @Html.EditorFor(m => m.Adress)
+
+        </p>
+        <p>
+            @Html.LabelFor(m => m.PostIndex, "Поштовий індекс")
+            <br />
+            @Html.EditorFor(m => m.PostIndex)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Capacity, "Місткість")
+            <br />
+            @Html.EditorFor(m => m.Capacity)
+        </p>
+        <p><input type="submit" value="Зберегти" /></p>
+    </fieldset>
+}

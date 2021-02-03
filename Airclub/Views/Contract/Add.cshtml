@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+}
+@model Airclub.Models.Contract
+
+<h2>Новый договір</h2>
+
+@using (Html.BeginForm("Add", "Contract", FormMethod.Post))
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.Id)
+        <p>
+            @Html.Label("Техніка")
+            <br />
+            @Html.DropDownList("Aircraft", ViewBag.Aircrafts as SelectList, new { id = "aircraft" })
+        </p>
+        <p>
+            @Html.Label("Послуга")
+            <br />
+            @Html.DropDownList("ServiceId", ViewBag.Services as SelectList, new { id = "service" })
+
+        </p>
+        <p>
+            @Html.LabelFor(m => m.CustomerId, "Клієнт")
+            <br />
+            @Html.DropDownListFor(m => m.CustomerId, ViewBag.Customers as SelectList)
+        </p>
+        <p>
+            @Html.HiddenFor(m => m.ContractSignDate)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.ContractStartDate, "Початок дії")
+            <br />
+            @Html.TextBoxFor(m => m.ContractStartDate, new { @type = "date" })
+        </p>
+        <p>
+            @Html.LabelFor(m => m.ContractFinishDate, "Закінчення дії")
+            <br />
+            @Html.TextBoxFor(m => m.ContractFinishDate, new { @type = "date" })
+        </p>
+        <p>
+            @Html.HiddenFor(m => m.Id)
+        </p>
+        <p><input type="submit" value="Зберегти" /></p>
+    </fieldset>
+    @section scripts{
+        <script type="text/javascript">
+    $(function () {
+
+        $('#aircraft').change(function()
+        {
+            // получаем выбранный id
+            var id = $(this).val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetServices")/' + id,
+                success: function (data) {
+
+                    // заменяем содержимое присланным частичным представлением
+                    $('#service').replaceWith(data);
+                }
+            });
+        });
+    })
+        </script>
+    }
+}

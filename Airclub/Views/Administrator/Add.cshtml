@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+}
+@model Airclub.Models.Administrator
+
+<h2>Новий співробітник</h2>
+
+@using (Html.BeginForm("Add", "Administrator", FormMethod.Post))
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.Id)
+        <p>
+            @Html.LabelFor(m => m.Login, "Логін");
+            <br />
+            @Html.EditorFor(m => m.Login)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Password, "Пароль")
+            <br />
+            @Html.EditorFor(m => m.Password)
+
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Name, "ПІБ")
+            <br />
+            @Html.EditorFor(m => m.Name)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.AccessLevel, "Рівень доступу")
+            <br />
+            @Html.DropDownListFor(m => m.AccessLevel, ViewBag.Roles as SelectList)
+        </p>
+        <p><input type="submit" value="Зберегти" /></p>
+    </fieldset>
+}

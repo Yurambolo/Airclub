@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+}
+@model Airclub.Models.Customer
+
+<h2>Новий клієнт</h2>
+
+@using (Html.BeginForm("Add", "Customer", FormMethod.Post))
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.Id)
+        <p>
+            @Html.LabelFor(m => m.Name, "ПІБ");
+            <br />
+            @Html.EditorFor(m => m.Name)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Passport, "Номер пасспорта")
+            <br />
+            @Html.EditorFor(m => m.Passport)
+
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Adress, "Адреса")
+            <br />
+            @Html.EditorFor(m => m.Adress)
+        </p>
+        <p>
+            @Html.LabelFor(m => m.Birthday, "День нарождення")
+            <br />
+            @Html.TextBoxFor(m => m.Birthday, new { @type = "date" })
+        </p>
+        <p><input type="submit" value="Зберегти" /></p>
+    </fieldset>
+}

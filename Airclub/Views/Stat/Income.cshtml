@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "Income";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Прибуток</title>
+</head>
+<body>
+    <div>
+        <h2>Прибуток</h2>
+        @foreach (var b in ViewBag.Bases)
+        {
+            <h3>@b.Base.City, @b.Base.Adress. Всього: @b.Income грн. </h3>
+            <br>
+            <table border="1">
+                <tr>
+                    <td><p>Id</p></td>
+                    <td><p>Послуга</p></td>
+                    <td><p>Техніка</p></td>
+                    <td><p>Співробітник</p></td>
+                    <td><p>Клієнт</p></td>
+                    <td><p>Дата підписання</p></td>
+                    <td><p>Дата початку дії</p></td>
+                    <td><p>Дата закінчення дії</p></td>
+                    <td><p>Загальна вартість</p></td>
+                </tr>
+                @foreach (var a in ViewBag.Contracts)
+                {
+                    if (a.Service.Aircraft.BaseId == b.Base.Id)
+                    {
+                        <tr>
+                            <td><p>@a.Id</p></td>
+                            <td><p>@a.Service.Name</p></td>
+                            <td><p>@a.Service.Aircraft.RegistrationNumber</p></td>
+                            <td><p>@a.Administrator.Name</p></td>
+                            <td><p>@a.Customer.Name</p></td>
+                            <td><p>@a.ContractSignDate</p></td>
+                            <td><p>@a.ContractStartDate</p></td>
+                            <td><p>@a.ContractFinishDate</p></td>
+                            <td><p>@a.TotalCost</p></td>
+                        </tr>
+                    }
+                }
+            </table>
+            <br>
+        }
+        <h2>Всього: @ViewBag.TotalIncome</h2>
+    </div>
+</body>
+
+

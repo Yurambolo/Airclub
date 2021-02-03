@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "Aircrafts";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Техніка</title>
+</head>
+<body>
+    <div>
+        <input type="button" value="Завантажити звіт" onClick='location.href="/Reporting/Aircrafts"'>
+        <h2>Техніка</h2>
+        @foreach (var b in ViewBag.Bases)
+        {
+            <h3>@b.City, @b.Adress</h3>
+            <br>
+            foreach (var a in ViewBag.Aircrafts)
+            {
+                if (a.BaseId == b.Id)
+                {
+                    <p>Реєстраційний номер: @a.RegistrationNumber</p>
+                    <p>Клас: @a.Class</p>
+                    <p>Модель: @a.Model</p>
+                    <p>Виробник: @a.Manufacturer</p>
+                    <p>Статус: @a.Status</p>
+                    <p>Рік виробництва: @a.YearOfProduction</p>
+                    <p>Завершених договорів: @a.FinishedContracts</p>
+                    <br>
+                }
+            }
+        }
+    </div>
+</body>
+
+
